@@ -1,6 +1,7 @@
 package org.example;
 
 import java.util.regex.*;
+import java.util.ArrayList;
 
 public class Calc {
     public int add(String numbers) {
@@ -15,16 +16,26 @@ public class Calc {
             numbers = numbers.substring(EndIndex + 2);
         }
 
+        ArrayList<String> negNumbers = new ArrayList<>();
         String[] numberArray = numbers.split(delimiter);
-        
+
         for (String x: numberArray) {
             try{
-                sum += Integer.parseInt(x);
+                if (Integer.parseInt(x) < 0) {
+                    negNumbers.add(x);
+                } else {
+                    sum += Integer.parseInt(x);
+                }
             }
             catch (NumberFormatException e) {
                 throw new IllegalArgumentException("Рядок містить символи відмінні від чисел або деліметра");
             }
         }
-        return sum;
+        if (negNumbers.isEmpty()){
+            return sum;
+        }
+        else {
+            throw new IllegalArgumentException("Додані наступні від'ємні числа: " + String.join(", ", negNumbers));
+        }
     }
 }

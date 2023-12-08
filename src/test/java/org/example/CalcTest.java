@@ -67,6 +67,7 @@ class CalcTest {
             assertThrows(IllegalArgumentException.class, () -> calcTest.add(numbers));
         }
     }
+
     @Nested
     @DisplayName("Step 4")
     class Step4Tests {
@@ -76,5 +77,15 @@ class CalcTest {
             assertEquals(calcTest.add(numbers), 6);
         }
 
+    }
+
+    @Nested
+    @DisplayName("Step 5")
+    class Step5Tests {
+        @ParameterizedTest(name = "{0}")
+        @ValueSource(strings = {"-1,-2,-3,-4", "1,2,3,-1,4"})
+        void NegativeException(String numbers) {
+            assertThrows(IllegalArgumentException.class, () -> calcTest.add(numbers));
+        }
     }
 }
