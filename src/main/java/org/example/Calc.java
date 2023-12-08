@@ -23,7 +23,7 @@ public class Calc {
             try{
                 if (Integer.parseInt(x) < 0) {
                     negNumbers.add(x);
-                } else {
+                } else if (Integer.parseInt(x) < 1001) {
                     sum += Integer.parseInt(x);
                 }
             }

@@ -88,4 +88,14 @@ class CalcTest {
             assertThrows(IllegalArgumentException.class, () -> calcTest.add(numbers));
         }
     }
+
+    @Nested
+    @DisplayName("Step 6")
+    class Step6Tests {
+        @ParameterizedTest(name = "{0}")
+        @ValueSource(strings = {"1000,999,1001", "1500,800,199,999,1"})
+        void BiggerThanThousand(String numbers) {
+            assertEquals(calcTest.add(numbers), 1999);
+        }
+    }
 }
