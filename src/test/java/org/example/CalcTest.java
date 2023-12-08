@@ -66,7 +66,15 @@ class CalcTest {
         void DelimitersOrSymbols(String numbers) {
             assertThrows(IllegalArgumentException.class, () -> calcTest.add(numbers));
         }
-
+    }
+    @Nested
+    @DisplayName("Step 4")
+    class Step4Tests {
+        @ParameterizedTest(name = "{0}")
+        @ValueSource(strings = {"//*\\n1,2\\n2*1", "//e\\n1e2,2\\n1", "//+\\n1+2+1+2"})
+        void NewDelimiter(String numbers) {
+            assertEquals(calcTest.add(numbers), 6);
+        }
 
     }
 }

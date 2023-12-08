@@ -1,13 +1,22 @@
 package org.example;
 
+import java.util.regex.*;
+
 public class Calc {
     public int add(String numbers) {
         int sum = 0;
+        String delimiter = ",|\\\\n";
 
         if (numbers.isBlank()) return sum;
-        if (numbers.endsWith(",") || numbers.endsWith("\\n")) throw new IllegalArgumentException("Рядок не повинен закінчуватися на деліметр.");
 
-        String[] numberArray = numbers.split(",|\\\\n");
+        if (numbers.startsWith("//")) {
+            int EndIndex = numbers.indexOf("\\n");
+            delimiter += "|" + Pattern.quote(numbers.substring(2, EndIndex));
+            numbers = numbers.substring(EndIndex + 2);
+        }
+
+        String[] numberArray = numbers.split(delimiter);
+        
         for (String x: numberArray) {
             try{
                 sum += Integer.parseInt(x);
