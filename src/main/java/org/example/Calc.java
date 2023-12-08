@@ -12,7 +12,19 @@ public class Calc {
 
         if (numbers.startsWith("//")) {
             int EndIndex = numbers.indexOf("\\n");
-            delimiter += "|" + Pattern.quote(numbers.substring(2, EndIndex));
+            numbers = numbers.substring(EndIndex + 2);
+
+            Pattern customPattern = Pattern.compile("\\[([^]]+)]");
+            Matcher matcher = customPattern.matcher(numbers.substring(2, EndIndex));
+
+            StringBuilder custom = new StringBuilder();
+            if (matcher.find()) {
+                custom.append(Pattern.quote(matcher.group(1)));
+                delimiter += "|" + custom;
+            } else {
+                delimiter += "|" + Pattern.quote(numbers.substring(2, EndIndex));
+            }
+
             numbers = numbers.substring(EndIndex + 2);
         }
 

@@ -98,4 +98,14 @@ class CalcTest {
             assertEquals(calcTest.add(numbers), 1999);
         }
     }
+
+    @Nested
+    @DisplayName("Step 7")
+    class Step7Tests {
+        @ParameterizedTest(name = "{0}")
+        @ValueSource(strings = {"//[***]\\n1***2***3", "//[**]\\n1**2,3\\n"})
+        void BiggerThanThousand(String numbers) {
+            assertEquals(calcTest.add(numbers), 6);
+        }
+    }
 }
