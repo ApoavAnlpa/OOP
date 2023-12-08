@@ -18,8 +18,14 @@ public class Calc {
             Matcher matcher = customPattern.matcher(numbers.substring(2, EndIndex));
 
             StringBuilder custom = new StringBuilder();
-            if (matcher.find()) {
+            while (matcher.find()) {
+                if (!custom.isEmpty()) {
+                    custom.append("|");
+                }
                 custom.append(Pattern.quote(matcher.group(1)));
+            }
+
+            if (!custom.isEmpty()) {
                 delimiter += "|" + custom;
             } else {
                 delimiter += "|" + Pattern.quote(numbers.substring(2, EndIndex));
