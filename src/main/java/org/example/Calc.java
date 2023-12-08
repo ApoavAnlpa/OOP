@@ -5,8 +5,9 @@ public class Calc {
         int sum = 0;
 
         if (numbers.isBlank()) return sum;
+        if (numbers.endsWith(",") || numbers.endsWith("\\n")) throw new IllegalArgumentException("Рядок не повинен закінчуватися на деліметр.");
 
-        String[] numberArray = numbers.split(",");
+        String[] numberArray = numbers.split(",|\\\\n");
         for (String x: numberArray) {
             try{
                 sum += Integer.parseInt(x);

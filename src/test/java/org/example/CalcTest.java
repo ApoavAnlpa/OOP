@@ -14,9 +14,9 @@ class CalcTest {
     private final Calc calcTest = new Calc();
 
     @Nested
-    @DisplayName("Тести для першого кроку")
+    @DisplayName("Tests")
     class Step1Tests{
-        @Disabled("Тільки для першого кроку")
+        @Disabled("Step 1")
         @Test
         void moreThanTwoNumbers() {
             assertThrows(IllegalArgumentException.class, () -> calcTest.add("1,2,3"));
@@ -44,13 +44,29 @@ class CalcTest {
         }
     }
     @Nested
-    @DisplayName("Тести для другого кроку")
+    @DisplayName("Step 2")
     class Step2Tests{
         @ParameterizedTest(name = "{0}")
-        @DisplayName("More than 2 numbers")
         @ValueSource(strings = {"1,2,3,4,5", "5,5,5", "3,3,3,3,3", "1,1,1,1,1,1,1,1,1,1,1,1,1,1,1"})
         void DelimitersOrSymbols(String numbers) {
             assertEquals(calcTest.add(numbers), 15);
         }
+    }
+
+    @Nested
+    @DisplayName("Step 3")
+    class Step3Tests {
+        @ParameterizedTest(name = "{0}")
+        @ValueSource(strings = {"1,2\\n3", "1\\n2,3", "1\\n2\\n3"})
+        void NewDelimiter(String numbers) {
+            assertEquals(calcTest.add(numbers), 6);
+        }
+        @ParameterizedTest(name = "{0}")
+        @ValueSource(strings = {"1,2,\\n3", "1\\n\\n2,3", ",\\n12,3", "1,\\n"})
+        void DelimitersOrSymbols(String numbers) {
+            assertThrows(IllegalArgumentException.class, () -> calcTest.add(numbers));
+        }
+
+
     }
 }
