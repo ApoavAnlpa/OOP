@@ -1,6 +1,8 @@
 package org.example;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -14,6 +16,7 @@ class CalcTest {
     @Nested
     @DisplayName("Тести для першого кроку")
     class Step1Tests{
+        @Disabled("Тільки для першого кроку")
         @Test
         void moreThanTwoNumbers() {
             assertThrows(IllegalArgumentException.class, () -> calcTest.add("1,2,3"));
@@ -40,9 +43,14 @@ class CalcTest {
             assertThrows(IllegalArgumentException.class, () -> calcTest.add(numbers));
         }
     }
-
-
-
-
-
+    @Nested
+    @DisplayName("Тести для другого кроку")
+    class Step2Tests{
+        @ParameterizedTest(name = "{0}")
+        @DisplayName("More than 2 numbers")
+        @ValueSource(strings = {"1,2,3,4,5", "5,5,5", "3,3,3,3,3", "1,1,1,1,1,1,1,1,1,1,1,1,1,1,1"})
+        void DelimitersOrSymbols(String numbers) {
+            assertEquals(calcTest.add(numbers), 15);
+        }
+    }
 }
