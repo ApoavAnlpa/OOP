@@ -1,8 +1,7 @@
 package org.example;
 
+import java.util.regex.*;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Calc {
     public int add(String numbers) {
@@ -13,27 +12,23 @@ public class Calc {
 
         if (numbers.startsWith("//")) {
             int endIndex = numbers.indexOf("\\n");
-
-            if (endIndex != -1) {
+            if (endIndex != -1 && endIndex + 2 < numbers.length()) {
                 String customDelimiterSection = numbers.substring(2, endIndex);
-                numbers = numbers.substring(endIndex + 2);
 
                 Pattern customPattern = Pattern.compile("\\[([^]]+)]");
                 Matcher matcher = customPattern.matcher(customDelimiterSection);
 
                 StringBuilder custom = new StringBuilder();
-                while (matcher.find()) {
-                    if (!custom.isEmpty()) {
-                        custom.append("|");
-                    }
+                if (matcher.find()) {
                     custom.append(Pattern.quote(matcher.group(1)));
-                }
-
-                if (!custom.isEmpty()) {
                     delimiter += "|" + custom;
                 } else {
                     delimiter += "|" + Pattern.quote(customDelimiterSection);
                 }
+
+                numbers = numbers.substring(endIndex + 2);
+            } else {
+                throw new IllegalArgumentException("Invalid custom delimiter section");
             }
         }
 
@@ -48,14 +43,14 @@ public class Calc {
                     sum += Integer.parseInt(x);
                 }
             } catch (NumberFormatException e) {
-                throw new IllegalArgumentException("Рядок містить символи відмінні від чисел або деліметра");
+                throw new IllegalArgumentException("String contains characters other than numbers or delimiter");
             }
         }
 
         if (negNumbers.isEmpty()) {
             return sum;
         } else {
-            throw new IllegalArgumentException("Додані наступні від'ємні числа: " + String.join(", ", negNumbers));
+            throw new IllegalArgumentException("Negative numbers were added: " + String.join(", ", negNumbers));
         }
     }
 }

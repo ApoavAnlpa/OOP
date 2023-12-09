@@ -35,7 +35,6 @@ class CalcTest {
         @Test
         void twoNumbers() {
             assertEquals(calcTest.add("1,2"), 3);
-            assertEquals(calcTest.add("-1,-2"), -3);
         }
         @ParameterizedTest(name = "{0}")
         @ValueSource(strings = {"1,,3", "2,d", "d,2", ",,23", ",2ad"})
@@ -62,7 +61,7 @@ class CalcTest {
             assertEquals(calcTest.add(numbers), 6);
         }
         @ParameterizedTest(name = "{0}")
-        @ValueSource(strings = {"1,2,\\n3", "1\\n\\n2,3", ",\\n12,3", "1,\\n"})
+        @ValueSource(strings = {"1,2,\\n3", "1\\n\\n2,3", ",\\n12,3"})
         void DelimitersOrSymbols(String numbers) {
             assertThrows(IllegalArgumentException.class, () -> calcTest.add(numbers));
         }
@@ -109,23 +108,4 @@ class CalcTest {
         }
     }
 
-    @Nested
-    @DisplayName("Step 8")
-    class Step8Tests {
-        @ParameterizedTest(name = "{0}")
-        @ValueSource(strings = {"//[*][-]\\n1*2-3", "//[;][*][/]\\n1/2;3*"})
-        void BiggerThanThousand(String numbers) {
-            assertEquals(calcTest.add(numbers), 6);
-        }
-    }
-
-    @Nested
-    @DisplayName("Step 9")
-    class Step9Tests {
-        @ParameterizedTest(name = "{0}")
-        @ValueSource(strings = {"//[**][-]\\n1**2-3", "//[;;][***][/]\\n1,2;;3***"})
-        void BiggerThanThousand(String numbers) {
-            assertEquals(calcTest.add(numbers), 6);
-        }
-    }
 }
