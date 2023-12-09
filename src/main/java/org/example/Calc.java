@@ -1,7 +1,8 @@
 package org.example;
 
-import java.util.regex.*;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Calc {
     public int add(String numbers) {
@@ -11,48 +12,49 @@ public class Calc {
         if (numbers.isBlank()) return sum;
 
         if (numbers.startsWith("//")) {
-            int EndIndex = numbers.indexOf("\\n");
-            numbers = numbers.substring(EndIndex + 2);
+            int endIndex = numbers.indexOf("\\n");
 
-            Pattern customPattern = Pattern.compile("\\[([^]]+)]");
-            Matcher matcher = customPattern.matcher(numbers.substring(2, EndIndex));
+            if (endIndex != -1) {
+                String customDelimiterSection = numbers.substring(2, endIndex);
+                numbers = numbers.substring(endIndex + 2);
 
-            StringBuilder custom = new StringBuilder();
-            while (matcher.find()) {
-                if (!custom.isEmpty()) {
-                    custom.append("|");
+                Pattern customPattern = Pattern.compile("\\[([^]]+)]");
+                Matcher matcher = customPattern.matcher(customDelimiterSection);
+
+                StringBuilder custom = new StringBuilder();
+                while (matcher.find()) {
+                    if (!custom.isEmpty()) {
+                        custom.append("|");
+                    }
+                    custom.append(Pattern.quote(matcher.group(1)));
                 }
-                custom.append(Pattern.quote(matcher.group(1)));
-            }
 
-            if (!custom.isEmpty()) {
-                delimiter += "|" + custom;
-            } else {
-                delimiter += "|" + Pattern.quote(numbers.substring(2, EndIndex));
+                if (!custom.isEmpty()) {
+                    delimiter += "|" + custom;
+                } else {
+                    delimiter += "|" + Pattern.quote(customDelimiterSection);
+                }
             }
-
-            numbers = numbers.substring(EndIndex + 2);
         }
 
         ArrayList<String> negNumbers = new ArrayList<>();
         String[] numberArray = numbers.split(delimiter);
 
-        for (String x: numberArray) {
-            try{
+        for (String x : numberArray) {
+            try {
                 if (Integer.parseInt(x) < 0) {
                     negNumbers.add(x);
                 } else if (Integer.parseInt(x) < 1001) {
                     sum += Integer.parseInt(x);
                 }
-            }
-            catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 throw new IllegalArgumentException("Рядок містить символи відмінні від чисел або деліметра");
             }
         }
-        if (negNumbers.isEmpty()){
+
+        if (negNumbers.isEmpty()) {
             return sum;
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("Додані наступні від'ємні числа: " + String.join(", ", negNumbers));
         }
     }
